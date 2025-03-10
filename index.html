@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        }
+
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 5px rgba(78, 205, 196, 0.3);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #45b7b0;
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #4ecdc4;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #4ecdc4;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign In</h2>
+        <div class="success-message">Login successful!</div>
+        <form id="signinForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+                <div class="error-message" id="emailError">Please enter a valid email</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                </div>
+                <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
+            </div>
+
+            <button type="submit">Sign In</button>
+        </form>
+
+        <div class="links">
+            <a href="#">Forgot Password?</a>
+            <br>
+            <a href="#">Create Account</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signinForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const successMessage = document.querySelector('.success-message');
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        }
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideError(element) {
+            element.style.display = 'none';
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Validate email
+            if (email === '' || !validateEmail(email)) {
+                showError(emailError, 'Please enter a valid email');
+                isValid = false;
+            } else {
+                hideError(emailError);
+            }
+
+            // Validate password
+            if (password === '' || !validatePassword(password)) {
+                showError(passwordError, 'Password must be at least 8 characters');
+                isValid = false;
+            } else {
+                hideError(passwordError);
+            }
+
+            if (isValid) {
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+                form.reset();
+                // Here you would typically send the data to a server
+                console.log('Form submitted successfully!');
+            }
+        });
+    </script>
+</body>
+</html>
